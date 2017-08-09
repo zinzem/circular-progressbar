@@ -1,0 +1,12 @@
+<resources>
+    <declare-styleable name="CircularProgressBar">
+        <attr name="progress" format="integer" />
+        <attr name="start_angle" format="integer" />
+        <attr name="sweep_angle" format="integer" />
+        <attr name="progressbar_color" format="color" />
+        <attr name="progressbar_width" format="dimension" />
+        <attr name="progressbar_background_color" format="color" />
+        <attr name="progressbar_background_width" format="dimension" />
+        <attr name="animation_duration" format="integer" />
+    </declare-styleable>
+</resources>

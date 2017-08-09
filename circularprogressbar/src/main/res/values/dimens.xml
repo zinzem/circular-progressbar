@@ -1,0 +1,4 @@
+<resources>
+    <dimen name="default_progress_stroke_width">5dp</dimen>
+    <dimen name="default_background_stroke_width">5dp</dimen>
+</resources>
