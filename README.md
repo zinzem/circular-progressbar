@@ -6,7 +6,7 @@ Inspired by [CircularProgressBar](https://github.com/lopspower/CircularProgressB
 **Simple and lightweight library to create circular progress bars.**
 
 ## Install
-This library is hosted on Jitpack. Make sure to add it to the repositories.
+This library is hosted on [JitPack](https://jitpack.io/). Make sure to add it to the repositories.
 ```
 allprojects {
   repositories {
