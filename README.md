@@ -3,7 +3,7 @@
 
 Inspired by [CircularProgressBar](https://github.com/lopspower/CircularProgressBar)
 
-**Simple and lightweight library to create circular progress bars.**
+**Simple and lightweight library, [databinding](https://developer.android.com/topic/libraries/data-binding/index.html) compatible, to create circular progress bars.**
 
 ## Install
 This library is hosted on [JitPack](https://jitpack.io/). Make sure to add it to the repositories.
@@ -15,15 +15,13 @@ allprojects {
   }
 }
 ```
-
 Then just add this to your dependencies
 ```
 compile 'com.github.zinzem:circular-progressbar:1.0.0'
 ```
+
 ## Usage
-
 ### XML
-
 ```
  <com.zinzem.circularprogressbar.CircularProgressBar
     android:id="@+id/circular_progress"
@@ -38,6 +36,7 @@ compile 'com.github.zinzem:circular-progressbar:1.0.0'
     app:progressbar_background_width="10dp"
     app:animation_duration="1500"/>
 ```
+
 #### Parameters
 - `progress`: The progress value.
 - `start_angle`: The start angle of the progress (and background), in degrees. **Default is -90**, equals to 12:00 on a clock.
@@ -47,3 +46,32 @@ compile 'com.github.zinzem:circular-progressbar:1.0.0'
 - `progressbar_background_color`: The progress bar background color. **Default is grey.**
 - `progressbar_background_width`: The progress bar background stroke width. **Default 5dp.**
 - `animation_duration`: The duration of the progress animation, in milliseconds. **Default is 700.**
+
+#### Databinding
+
+```
+<layout>
+
+  <data>
+    <variable
+        name="task"
+        type="..."/>
+  </data>
+  
+  ...
+
+   <com.zinzem.circularprogressbar.CircularProgressBar
+      android:id="@+id/circular_progress"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      app:progress="@{task.progress}"
+      app:start_angle="0"
+      app:swipe_angle="360"
+      app:progressbar_color="#512da8"
+      app:progressbar_width="10dp"
+      app:progressbar_background_color="#d1c4e9"
+      app:progressbar_background_width="10dp"
+      app:animation_duration="1500"/>
+    
+</layout
+```
