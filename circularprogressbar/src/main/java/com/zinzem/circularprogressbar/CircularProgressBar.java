@@ -1,9 +1,8 @@
 package com.zinzem.circularprogressbar;
 
-import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.databinding.BindingAdapter;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -18,21 +17,23 @@ public class CircularProgressBar extends View {
     private float mProgress = 0f;
     private int mStartAngle = -90;
     private int mSweepAngle = 360;
-    private int mAnimationDuration = 700;
+    private int mAnimationDuration = 0;
     private Interpolator mAnimationInterpolator = new AccelerateDecelerateInterpolator();
 
     private RectF mRectF;
     private Paint mProgressPaint;
     private Paint mBackgroundPaint;
 
+    private ValueAnimator mValueAnimator = new ValueAnimator();
+
     public CircularProgressBar(Context context, AttributeSet attrs) {
         super(context, attrs);
-        TypedArray typedArray = context.getTheme().obtainStyledAttributes(attrs, R.styleable.CircularProgressBar, 0, 0);
         float progressStrokeWidth = getResources().getDimension(R.dimen.default_progress_stroke_width);
         int progressColor = Color.BLACK;
         float backgroundStrokeWidth = getResources().getDimension(R.dimen.default_background_stroke_width);
-        int backgroundColor = Color.BLACK;
+        int backgroundColor = Color.GRAY;
 
+        TypedArray typedArray = context.getTheme().obtainStyledAttributes(attrs, R.styleable.CircularProgressBar, 0, 0);
         try {
             mProgress = typedArray.getFloat(R.styleable.CircularProgressBar_progress, mProgress);
             mStartAngle = typedArray.getInt(R.styleable.CircularProgressBar_start_angle, mStartAngle);
@@ -67,6 +68,7 @@ public class CircularProgressBar extends View {
         float thickestStroke = (mProgressPaint.getStrokeWidth() > mBackgroundPaint.getStrokeWidth()) ? mProgressPaint.getStrokeWidth() : mBackgroundPaint.getStrokeWidth();
 
         setMeasuredDimension(minDimension, minDimension);
+
         mRectF.set(thickestStroke / 2, thickestStroke / 2, minDimension - thickestStroke / 2, minDimension - thickestStroke / 2);
     }
 
@@ -77,32 +79,24 @@ public class CircularProgressBar extends View {
         canvas.drawArc(mRectF, mStartAngle, mSweepAngle * mProgress / 100, false, mProgressPaint);
     }
 
-    @BindingAdapter("progress")
-    public static void setProgressWithBinding(CircularProgressBar circularProgressBar, Number progress) {
-        float progressFloatValue = 0;
-
-        if (progress instanceof Double) {
-            progressFloatValue = Double.valueOf((double) progress).floatValue();
-        } else if (progress instanceof Float) {
-            progressFloatValue = (float) progress;
-        } else if (progress instanceof Long) {
-            progressFloatValue = (long) progress;
-        } else if (progress instanceof Integer) {
-            progressFloatValue = (int) progress;
-        }
-        circularProgressBar.animateProgressTo(progressFloatValue);
+    public void animateProgress(float from, float to) {
+        mValueAnimator.cancel();
+        mValueAnimator.removeAllUpdateListeners();
+        mValueAnimator.setFloatValues(from, to);
+        mValueAnimator.setDuration(mAnimationDuration);
+        mValueAnimator.setInterpolator(mAnimationInterpolator);
+        mValueAnimator.start();
+        mValueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                mProgress = (float) valueAnimator.getAnimatedValue();
+                invalidate();
+            }
+        });
     }
 
-    public void animateProgressTo(float progress) {
-        ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(this, "progress", progress);
-
-        objectAnimator.setDuration(mAnimationDuration);
-        objectAnimator.setInterpolator(mAnimationInterpolator);
-        objectAnimator.start();
-    }
-
-    public float getProgress() {
-        return mProgress;
+    public Integer getProgress() {
+        return (int) mProgress;
     }
     public float getProgressStrokeWidth() {
         return mProgressPaint.getStrokeWidth();
@@ -129,9 +123,15 @@ public class CircularProgressBar extends View {
         return mAnimationInterpolator;
     }
 
-    public void setProgress(float progress) {
-        mProgress = (progress <= 100) ? progress : 100;
-        invalidate();
+    public void setProgress(Integer progress) {
+        if (progress <= 100) {
+            if (mAnimationDuration <= 0) {
+                mProgress = progress;
+                invalidate();
+            } else {
+                animateProgress(mProgress, progress);
+            }
+        }
     }
     public void setProgressStrokeWidth(float strokeWidth) {
         mProgressPaint.setStrokeWidth(strokeWidth);
