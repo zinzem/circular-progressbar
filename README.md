@@ -45,7 +45,7 @@ compile 'com.github.zinzem:circular-progressbar:1.0.0'
 - `progressbar_width`: The progress bar stroke width.  **Default 5dp.**
 - `progressbar_background_color`: The progress bar background color. **Default is grey.**
 - `progressbar_background_width`: The progress bar background stroke width. **Default 5dp.**
-- `animation_duration`: The duration of the progress animation, in milliseconds. **Default is 700.**
+- `animation_duration`: The duration of the progress animation, in milliseconds. **Default is 0 (Disabled).**
 
 #### Databinding
 
