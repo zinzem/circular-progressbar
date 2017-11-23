@@ -124,7 +124,7 @@ public class CircularProgressBar extends View {
     }
 
     public void setProgress(Integer progress) {
-        if (progress <= 100) {
+        if (progress != null && progress <= 100) {
             if (mAnimationDuration <= 0) {
                 mProgress = progress;
                 invalidate();
