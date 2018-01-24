@@ -17,7 +17,7 @@ allprojects {
 ```
 Then just add this to your dependencies
 ```
-compile 'com.github.zinzem:circular-progressbar:1.0.0'
+compile 'com.github.zinzem:circular-progressbar:1.2.1'
 ```
 
 ## Usage
